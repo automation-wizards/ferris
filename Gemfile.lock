@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ferris (0.1.0)
+    ferris_watir (0.1.0)
       watir (>= 6.0.2)
 
 GEM
@@ -38,7 +38,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ferris!
+  ferris_watir!
   rspec (>= 3.5.0)
   watir_model (>= 0.2.2)
 

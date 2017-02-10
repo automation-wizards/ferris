@@ -1,13 +1,13 @@
 # coding: utf-8
 
 Gem::Specification.new do |spec|
-  spec.name          = 'ferris'
+  spec.name          = 'ferris_watir'
   spec.version       = '0.1.0'
   spec.authors       = ['Automation Wizards']
   spec.email         = ['Justin.Commu@loblaw.ca']
 
-  spec.summary       = 'A functional approach to PageObjecting'
-  spec.description   = 'Ferris helps organize page objects into a site object and address them in a functionalish way'
+  spec.summary       = 'Next level web testing framework'
+  spec.description   = 'An un-opinionated testing framework built on top of WATIR which provides massive power with minimal DSL. '
   spec.homepage      = 'https://loblawdigital.ca'
   spec.license       = 'MIT'
 
