@@ -75,7 +75,7 @@ module Ferris
     end
 
     def loaded?
-      raise Selenium::WebDriver::Error::WebDriverError, 'Cannot verify a page/region without requirements' unless page_verifiable?
+      raise Selenium::WebDriver::Error::WebDriverError, 'Cannot verify a page/region without requirements' unless verifiable?
       [!self.class.require_url || check_url, !respond_to?(:page_title) || check_title, !self.class.required_element_list.any? || check_required_elements].all?
     end
 
