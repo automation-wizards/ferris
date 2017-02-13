@@ -80,11 +80,13 @@ module Ferris
     end
 
     def check_url
-      page_url[%r{^#{URI.parse(page_url).scheme}://(.*?)/?$}, 1] == browser.url[%r{^#{URI.parse(browser.url).scheme}://(.*?)/?$}, 1]
+      browser.wait_until { |browser| page_url[%r{^#{URI.parse(page_url).scheme}://(.*?)/?$}, 1] == browser.url[%r{^#{URI.parse(browser.url).scheme}://(.*?)/?$}, 1] }
     end
 
     def check_title
-      browser.title == page_title
+      browser.wait_until { |browser| browser.title == page_title }
+    rescue Watir::Wait::TimeoutError
+      false
     end
 
     def check_required_elements

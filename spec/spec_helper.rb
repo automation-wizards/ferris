@@ -1,4 +1,5 @@
 require_relative '../lib/ferris'
+require_relative 'support/site'
 
 RSpec.configure do |config|
 
