@@ -11,7 +11,6 @@ module Ferris
       @url = args[:url]
       @sa = args
       visit
-      maximize
       initializer if respond_to?(:initializer)
     end
 
@@ -32,6 +31,7 @@ module Ferris
     end
 
     def resize_to(width: @width, height: @height)
+      maximize unless @width && @height
       @b.driver.manage.window.resize_to(width, height)
     end
 
