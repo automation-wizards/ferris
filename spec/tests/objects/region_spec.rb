@@ -17,12 +17,28 @@ describe 'Ferris' do
       expect(@region).to be_a Ferris::Region
     end
 
-    it 'responds to attr sa' do
-      expect(@region).to respond_to :sa
+    it 'responds to attr site' do
+      expect(@region).to respond_to :site
     end    
+
+    it 'responds to attr s' do
+      expect(@region).to respond_to :s
+    end  
+
+    it 'responds to attr browser' do
+      expect(@region).to respond_to :browser
+    end    
+
+    it 'responds to attr b' do
+      expect(@region).to respond_to :b
+    end   
 
     it 'responds to attr r' do
       expect(@region).to respond_to :r
+    end    
+
+    it 'responds to attr root' do
+      expect(@region).to respond_to :root
     end    
 
     it 'responds to exists?' do
@@ -53,12 +69,28 @@ describe 'Ferris' do
       expect(@regions.size).to eq 16
     end
 
-    it 'responds to attr sa' do
-      expect(@regions.first).to respond_to :sa
+    it 'responds to attr site' do
+      expect(@regions.first).to respond_to :site
+    end    
+
+    it 'responds to attr s' do
+      expect(@regions.first).to respond_to :s
+    end  
+
+    it 'responds to attr browser' do
+      expect(@regions.first).to respond_to :browser
+    end    
+
+    it 'responds to attr b' do
+      expect(@regions.first).to respond_to :b
     end    
 
     it 'responds to attr r' do
       expect(@regions.first).to respond_to :r
+    end    
+
+    it 'responds to attr root' do
+      expect(@regions.first).to respond_to :root
     end    
 
     it 'responds to exists?' do

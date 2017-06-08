@@ -1,42 +1,42 @@
 
 module Ferris
   class Site
-    attr_reader :url, :b, :sa, :width, :height
+    attr_reader :url, :args
 
+    extend Ferris::Concepts::Hooks
     extend Ferris::Concepts::Pages
     extend Ferris::Concepts::Regions
 
     def initialize(type, **args)
-      @b = Ferris::Browser.send(type, args)
+      @browser = Ferris::Browser.send(type, args)
       @url = args[:url]
-      @sa = args
-      initializer if respond_to?(:initializer)
-      @b.goto @url
+      @args = args
+      after_initialize if respond_to?(:after_initialize)
+      visit
     end
 
+    def site 
+      self
+    end
+    alias s site
+    
+    def browser 
+      @browser 
+    end
+    alias b browser
+
     def visit
-      @b.goto @url
-      ensure_loaded if respond_to?(:ensure_loaded)
+      browser.goto @url
+      after_visit if respond_to?(:after_visit)
       self
     end
 
     def close
-      @b.quit
-    end
-
-    def maximize
-      @b.driver.manage.window.maximize
-      @width  = @b.execute_script('return screen.width;')
-      @height = @b.execute_script('return screen.height;')
-    end
-
-    def resize_to(width: @width, height: @height)
-      maximize unless @width && @height
-      @b.driver.manage.window.resize_to(width, height)
+      browser.quit
     end
 
     def clear_cookies
-      @b.cookies.clear
+      browser.cookies.clear
     end
   end
 end

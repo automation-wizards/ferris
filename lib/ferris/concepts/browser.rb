@@ -12,13 +12,13 @@ module Ferris
       PREF_MAP   = { geolocation: :managed_default_content_settings,
                      password_manager: :password_manager_enabled }.freeze
 
-      CAPS_MAP = { browser_name: :browser_name,
+      CAPS_MAP = { browser: :browser_name,
                    version: :version,
                    os:      :platform,
                    name:    :name }.freeze
 
       def local(**args)
-        vendor = args.fetch(:browser, :chrome)
+        vendor = args.fetch(:browser, :chrome).to_sym
         Watir::Browser.new(vendor, switches: map_switches(args), prefs: map_prefs(args))
       end
 

@@ -20,9 +20,17 @@ describe Ferris::Page do
     expect(@page).to respond_to :b
   end
 
-  it 'responds to attr sa' do
-    expect(@page).to respond_to :sa
-  end  
+    it 'responds to attr browser' do
+    expect(@page).to respond_to :browser
+  end
+
+  it 'responds to attr site' do
+    expect(@page).to respond_to :site
+  end 
+
+    it 'responds to attr s' do
+    expect(@page).to respond_to :s
+  end   
 
   it 'responds to attr url' do
     expect(@page).to respond_to :url

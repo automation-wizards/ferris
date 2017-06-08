@@ -23,12 +23,6 @@ describe Ferris::Site do
       @website.close
     end
 
-     it 'can resize' do
-      @website = Website.new(:local, size:'1200x100'  url: BASE_URL)
-      expect(@website).to be_a Ferris::Site
-      expect(@website.b.size).to eql '1200x100'
-    end
-
     it 'supports switches' do
       @website = Website.new(:local,headless: false, ignore_ssl_errors: true,  url: BASE_URL)
       expect(@website).to be_a Ferris::Site
@@ -58,8 +52,12 @@ describe Ferris::Site do
       expect(@local_website).to be_a Ferris::Site
     end
 
-     it 'responds to attr sa' do
-      expect(@local_website).to respond_to :sa
+     it 'responds to attr site' do
+      expect(@local_website).to respond_to :site
+    end   
+
+     it 'responds to attr s' do
+      expect(@local_website).to respond_to :s
     end   
 
     it 'responds to attr url' do
@@ -70,20 +68,8 @@ describe Ferris::Site do
       expect(@local_website).to respond_to :b
     end    
 
-    it 'responds to attr width' do
-      expect(@local_website).to respond_to :width
-    end  
- 
-    it 'responds to attr height' do
-      expect(@local_website).to respond_to :height
-    end      
-  
-    it 'responds to method maximize' do
-      expect(@local_website).to respond_to :maximize
-    end     
-
-    it 'responds to method resize_to' do
-      expect(@local_website).to respond_to :resize_to
+    it 'responds to attr browser' do
+      expect(@local_website).to respond_to :browser
     end    
 
     it 'responds to clear_cookies' do
@@ -91,12 +77,8 @@ describe Ferris::Site do
     end 
 
     it 'site_args is a hash' do
-      expect(@local_website.sa).to be_a Hash
+      expect(@local_website.args).to be_a Hash
     end
-
-     it 'can change size' do
-      expect(@local_website.resize_to(width: 1020, height: 1024)).to be nil
-    end 
 
      it 'can clear cookies' do
       expect(@local_website.clear_cookies).to be nil 
@@ -120,8 +102,16 @@ describe Ferris::Site do
       expect(@remote_website).to be_a Ferris::Site
     end
 
-    it 'responds to attr sa' do
-      expect(@remote_website).to respond_to :sa
+     it 'responds to attr site' do
+      expect(@remote_website).to respond_to :site
+    end   
+
+     it 'responds to attr s' do
+      expect(@remote_website).to respond_to :s
+    end   
+
+    it 'responds to attr args' do
+      expect(@remote_website).to respond_to :args
     end
 
     it 'responds to attr url' do
@@ -132,33 +122,17 @@ describe Ferris::Site do
       expect(@remote_website).to respond_to :b
     end      
 
-    it 'responds to attr width' do
-      expect(@remote_website).to respond_to :width
-    end  
- 
-    it 'responds to attr height' do
-      expect(@remote_website).to respond_to :height
-    end      
-  
-    it 'responds to method maximize' do
-      expect(@remote_website).to respond_to :maximize
-    end     
-
-    it 'responds to method resize_to' do
-      expect(@remote_website).to respond_to :resize_to
-    end    
+    it 'responds to attr browser' do
+      expect(@remote_website).to respond_to :browser
+    end
 
     it 'responds to clear_cookies' do
      expect(@remote_website).to respond_to :clear_cookies
     end 
 
-    it 'site_args is a hash' do
-      expect(@remote_website.sa).to be_a Hash
+    it 'site args is a hash' do
+      expect(@remote_website.args).to be_a Hash
     end
-
-     it 'can change size' do
-      expect(@remote_website.resize_to(width: 1020, height: 1024)).to be nil
-    end 
 
      it 'can clear cookies' do
       expect(@remote_website.clear_cookies).to be nil 
