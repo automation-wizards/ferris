@@ -22,7 +22,13 @@ describe Ferris::Site do
     after(:each) do
       @website.close
     end
-    
+
+     it 'can resize' do
+      @website = Website.new(:local, size:'1200x100'  url: BASE_URL)
+      expect(@website).to be_a Ferris::Site
+      expect(@website.b.size).to eql '1200x100'
+    end
+
     it 'supports switches' do
       @website = Website.new(:local,headless: false, ignore_ssl_errors: true,  url: BASE_URL)
       expect(@website).to be_a Ferris::Site
