@@ -11,7 +11,7 @@ module Ferris
       @url = args[:url]
       @sa = args
       initializer if respond_to?(:initializer)
-      visit
+      @b.goto @url
     end
 
     def visit
