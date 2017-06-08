@@ -12,7 +12,7 @@ module Ferris
       PREF_MAP   = { geolocation: :managed_default_content_settings,
                      password_manager: :password_manager_enabled }.freeze
 
-      CAPS_MAP = { browser: :browser_name,
+      CAPS_MAP = { browser_name: :browser_name,
                    version: :version,
                    os:      :platform,
                    name:    :name }.freeze
