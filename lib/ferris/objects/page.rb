@@ -4,7 +4,6 @@ module Ferris
 
     include Ferris::Concepts::FormFilling
 
-    extend Ferris::Concepts::Hooks
     extend Ferris::Concepts::Regions
     extend Ferris::Concepts::Elements
     extend Ferris::Concepts::PageAttributes
@@ -12,8 +11,6 @@ module Ferris
     def initialize(site:)
       @site = site
       @url = site.url + partial_url
-      site.after_initialize if site.respond_to?(:after_initialize)
-      after_initialize if respond_to?(:after_initialize)
     end
 
     def site
@@ -28,9 +25,11 @@ module Ferris
 
     def visit
       b.goto @url
-      site.after_visit if site.respond_to?(:after_visit)
-      after_visit if respond_to?(:after_visit)
+      site.after_visit
+      after_visit
       self
     end
+
+    def after_visit; end  
   end
 end

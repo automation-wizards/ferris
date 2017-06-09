@@ -3,7 +3,6 @@ module Ferris
   class Site
     attr_reader :url, :args
 
-    extend Ferris::Concepts::Hooks
     extend Ferris::Concepts::Pages
     extend Ferris::Concepts::Regions
 
@@ -11,7 +10,6 @@ module Ferris
       @browser = Ferris::Browser.send(type, args)
       @url = args[:url]
       @args = args
-      after_initialize if respond_to?(:after_initialize)
       visit
     end
 
@@ -27,10 +25,12 @@ module Ferris
 
     def visit
       browser.goto @url
-      after_visit if respond_to?(:after_visit)
+      after_visit
       self
     end
 
+    def after_visit; end
+    
     def close
       browser.quit
     end

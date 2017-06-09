@@ -4,8 +4,6 @@ require_relative 'regions/article'
 require_relative 'pages/elements'
 
 class Website < Ferris::Site
-  after_initialize { }
-  after_visit      { }
   
   pg(:elements_pg, Pg::El)
 
