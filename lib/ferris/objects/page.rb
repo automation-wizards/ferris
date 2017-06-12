@@ -11,6 +11,7 @@ module Ferris
     def initialize(site:)
       @site = site
       @url = site.url + partial_url
+      initializer if respond_to?(:initializer)
     end
 
     def site

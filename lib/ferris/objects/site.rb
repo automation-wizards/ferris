@@ -10,6 +10,7 @@ module Ferris
       @browser = Ferris::Browser.send(type, args)
       @url = args[:url]
       @args = args
+      initializer if respond_to?(:initializer)
       visit
     end
 

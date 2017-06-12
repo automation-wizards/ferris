@@ -12,6 +12,7 @@ module Ferris
     def initialize(root:, site:)
       @root = root
       @site = site
+      initializer if respond_to?(:initializer)
     end
 
     def site
