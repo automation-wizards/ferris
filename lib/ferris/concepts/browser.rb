@@ -18,8 +18,11 @@ module Ferris
                    name:    :name }.freeze
 
       def local(**args)
+        options = Selenium::WebDriver::Chrome::Options.new
         vendor = args.fetch(:browser, :chrome).to_sym
-        Watir::Browser.new(vendor, switches: map_switches(args), prefs: map_prefs(args))
+        map_switches(args, options)
+        map_prefs(args, options)
+        Watir::Browser.new(vendor, options: options)
       end
 
       def remote(**args)
@@ -35,25 +38,24 @@ module Ferris
         caps
       end
 
-      def map_switches(args)
-        s = []
+      def map_switches(args, options)
         args.each do |k, v|
-          s.push(SWITCH_MAP[k].gsub('****', v.to_s)) if SWITCH_MAP.include?(k) && v
+          options.add_argument(SWITCH_MAP[k].gsub('****', v.to_s)) if SWITCH_MAP.include?(k) && v
         end
-        s
       end
 
-      def map_prefs(args)
-        p = { profile: { managed_default_content_settings: {} } }
+      def map_prefs(args, options)
+        p = { managed_default_content_settings: {} }
         args.each do |k, v|
           next unless PREF_MAP.include?(k)
           case k
           when :geolocation
-            p[:profile][:managed_default_content_settings][:geolocation] = v.to_i
+            p[:managed_default_content_settings][:geolocation] = v.to_i
           else
-            p[:profile][PREF_MAP[k]] = v
+            p[PREF_MAP[k]] = v
           end
         end
+        options.add_preference(:profile, p)
       end
     end
   end
