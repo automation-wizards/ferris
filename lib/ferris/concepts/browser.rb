@@ -17,9 +17,16 @@ module Ferris
                    os:      :platform,
                    name:    :name }.freeze
 
+      BROWSER_MAP = { chrome:    { local: :chrome,    remote: 'Chrome',    options: 'Chrome' },
+                      firefox:   { local: :firefox,   remote: 'Firefox',   options: 'Firefox' },
+                      safari:    { local: :safari,    remote: 'Safari',    options: 'Safari' },
+                      ie:        { local: :ie,        remote: 'IE',        options: 'IE'} },
+                      phantomjs: { local: :phantomjs, remote: 'PhantomJS', options: 'PhantomJS' } }.freeze
+
       def local(**args)
-        options = Selenium::WebDriver::Chrome::Options.new
-        vendor = args.fetch(:browser, :chrome).to_sym
+        vendor = args.fetch(:browser, :chrome)
+        binding.pry
+        options = Kernel.const_get("Selenium::WebDriver::#{vendor.capitalize}::Options").new
         map_switches(args, options)
         map_prefs(args, options)
         Watir::Browser.new(vendor, options: options)
@@ -31,6 +38,8 @@ module Ferris
       end
 
       private
+
+      def 
 
       def map_caps(args)
         caps = Selenium::WebDriver::Remote::Capabilities.new
