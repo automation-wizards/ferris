@@ -15,7 +15,7 @@ before_install:
 addons:
   apt:
     packages:
-      - google-chrome-beta
+      - google-chrome-stable
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -26,6 +26,4 @@ script:
   - unzip chromedriver_linux64.zip
   - sudo chmod +x chromedriver
   - sudo mv chromedriver /usr/local/bin
-  - which chromedriver
-  - which chrome
   - bundle exec rspec
