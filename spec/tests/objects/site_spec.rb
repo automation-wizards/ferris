@@ -106,7 +106,7 @@ describe Ferris::Site do
 
   context 'Remote' do 
     before(:all) do
-      @remote_website = Website.new(:remote, browser: 'chrome', url: BASE_URL)
+      @remote_website = Website.new(:remote, browser: :chrome, url: BASE_URL)
     end
 
     after(:all) do

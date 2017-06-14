@@ -17,9 +17,18 @@ module Ferris
                    os:      :platform,
                    name:    :name }.freeze
 
+      BROWSER_MAP = { chrome:    { local: :chrome,    remote: 'Chrome',    options: 'Chrome' },
+                      firefox:   { local: :firefox,   remote: 'Firefox',   options: 'Firefox' },
+                      safari:    { local: :safari,    remote: 'Safari',    options: 'Safari' },
+                      ie:        { local: :ie,        remote: 'IE',        options: 'IE' },
+                      phantomjs: { local: :phantomjs, remote: 'PhantomJS', options: 'PhantomJS' } }.freeze
+
       def local(**args)
-        vendor = args.fetch(:browser, :chrome).to_sym
-        Watir::Browser.new(vendor, switches: map_switches(args), prefs: map_prefs(args))
+        browser = verify_vendor(args)
+        options = Kernel.const_get("Selenium::WebDriver::#{browser[:options]}::Options").new
+        map_switches(args, options)
+        map_prefs(args, options)
+        Watir::Browser.new(browser[:local], options: options)
       end
 
       def remote(**args)
@@ -29,31 +38,35 @@ module Ferris
 
       private
 
+      def verify_vendor(args)
+        BROWSER_MAP[args.fetch(:browser, :chrome)]
+      end
+      
+
       def map_caps(args)
         caps = Selenium::WebDriver::Remote::Capabilities.new
         args.each { |k, v| caps[CAPS_MAP[k]] = v if CAPS_MAP.include?(k) }
         caps
       end
 
-      def map_switches(args)
-        s = []
+      def map_switches(args, options)
         args.each do |k, v|
-          s.push(SWITCH_MAP[k].gsub('****', v.to_s)) if SWITCH_MAP.include?(k) && v
+          options.add_argument(SWITCH_MAP[k].gsub('****', v.to_s)) if SWITCH_MAP.include?(k) && v
         end
-        s
       end
 
-      def map_prefs(args)
-        p = { profile: { managed_default_content_settings: {} } }
+      def map_prefs(args, options)
+        p = { managed_default_content_settings: {} }
         args.each do |k, v|
           next unless PREF_MAP.include?(k)
           case k
           when :geolocation
-            p[:profile][:managed_default_content_settings][:geolocation] = v.to_i
+            p[:managed_default_content_settings][:geolocation] = v.to_i
           else
-            p[:profile][PREF_MAP[k]] = v
+            p[PREF_MAP[k]] = v
           end
         end
+        options.add_preference(:profile, p)
       end
     end
   end
