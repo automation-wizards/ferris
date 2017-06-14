@@ -12,32 +12,39 @@ shared_examples 'Form Filling' do |inputs, retrieval_method|
     @website.close
   end
   
-  let(:input_data)   { HTML5DemoFormData.new.send(inputs) }
-  let(:website_data) { Hash[input_data.map { |k, _v| [k, @page.send(k).send(retrieval_method)] }] }
+  let(:text) { { text_field: 'Apple', password: 'MyPassword123#1', website: 'http://www.google.ca', email: 'ferris@bueller.ca', phone: '4165555555', search: 'Apples', number: '10564', error: 'Error!', valid: 'Valid!', text_area: 'This is a long text string with a lot of content in it' }}
+  let(:select_list_text)  { { select_list: 'Option Three' } }
+  let(:select_list_value) { { select_list: '2'}  }
+  let(:checkbox)          { { checkbox_1: true, checkbox_2: false, checkbox_3: true } }
+  let(:radio)             { { radio_3: true } }
+  let(:button)            { { button_btn: true } } 
+
+  let(:form_data) { send(inputs) }        
+  let(:website_data) { Hash[form_data.map { |k, _v| [k, @page.send(k).send(retrieval_method)] }] }
 
   it 'accurately populates with fill' do
-    @page.visit.fill(input_data)
+    @page.visit.fill(form_data)
     if inputs == :select_list_text
-      expect(Hash[input_data.map { |k, _v| [k, @page.send(k).selected_options.first.text]}] ).to include input_data
+      expect(Hash[form_data.map { |k, _v| [k, @page.send(k).selected_options.first.text]}] ).to include form_data
     else 
-      expect(website_data).to include input_data
+      expect(website_data).to include form_data
     end
   end
 
   it 'accurately populates with fill!' do
-    @page.visit.fill!(input_data)
+    @page.visit.fill!(form_data)
     if inputs == :select_list_text
-      expect(Hash[input_data.map { |k, _v| [k, @page.send(k).selected_options.first.text]}] ).to include input_data
+      expect(Hash[form_data.map { |k, _v| [k, @page.send(k).selected_options.first.text]}] ).to include form_data
     else 
-      expect(website_data).to include input_data
+      expect(website_data).to include form_data
     end
   end
 
   it 'fill! is better than fill' do
     @page.visit
-    watir = Benchmark.measure { @page.fill(input_data) }
+    watir = Benchmark.measure { @page.fill(form_data) }
     @page.visit
-    ferris = Benchmark.measure { @page.fill!(input_data) }
+    ferris = Benchmark.measure { @page.fill!(form_data) }
     expect(ferris.real).to be < watir.real
   end
 

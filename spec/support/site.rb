@@ -1,4 +1,3 @@
-require_relative 'data/element_data'
 require_relative 'regions/header'
 require_relative 'regions/article'
 require_relative 'pages/elements'

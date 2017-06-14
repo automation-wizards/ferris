@@ -6,8 +6,9 @@ module Ferris
     extend Ferris::Concepts::Pages
     extend Ferris::Concepts::Regions
 
-    def initialize(type, **args)
-      @browser = Ferris::Browser.send(type, args)
+    def initialize(**args)
+      @browser = Ferris::Browser.start(args)
+      raise 'Driver was not a Watir Browser' if browser.class != Watir::Browser
       @url = args[:url]
       @args = args
       initializer if respond_to?(:initializer)

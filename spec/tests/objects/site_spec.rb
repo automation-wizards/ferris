@@ -19,44 +19,52 @@ describe Ferris::Site do
 
   context 'Browser Mutation' do 
 
+    before(:all) do 
+      Ferris::Browser.define(:local_chrome,  :local)
+      Ferris::Browser.define(:has_switches,  :local,  ignore_ssl_errors: true)
+      Ferris::Browser.define(:has_prefs,     :local,  geolocation: 2)
+      Ferris::Browser.define(:headless,      :local,  headless: true)
+      Ferris::Browser.define(:remote_chrome, :remote, browser: 'Chrome')
+    end
+    
     after(:each) do
       @website.close
     end
 
     it 'supports switches' do
-      @website = Website.new(:local, ignore_ssl_errors: true,  url: BASE_URL)
+      @website = Website.new(driver: :has_switches, url: BASE_URL)
       expect(@website).to be_a Ferris::Site
     end
 
     it 'supports headless' do
-      @website = Website.new(:local, headless: true,  url: BASE_URL)
+      @website = Website.new(driver: :headless, url: BASE_URL)
       expect(@website).to be_a Ferris::Site
     end
 
     it 'supports maximizing a headless window' do
-      @website = Website.new(:local, headless: true,  url: BASE_URL)
+      @website = Website.new(driver: :headless, url: BASE_URL)
       expect(@website.browser.window.maximize).to be_truthy
     end
 
     it 'supports re-sizing a headless window' do
-      @website = Website.new(:local, headless: true,  url: BASE_URL)
+      @website = Website.new(driver: :headless, url: BASE_URL)
       expect(@website.browser.window.resize_to 100, 100).to be_truthy
     end
 
    it 'supports prefs' do
-     @website = Website.new(:local, geolocation: 2,  url: BASE_URL)
-      expect(@website).to be_a Ferris::Site
+     @website = Website.new(driver: :has_prefs, url: BASE_URL)
+     expect(@website).to be_a Ferris::Site
     end
 
    it 'supports capabilities' do
-     @website = Website.new(:remote, browser: 'chrome', url: BASE_URL)
+     @website = Website.new(driver: :remote_chrome, url: BASE_URL)
       expect(@website).to be_a Ferris::Site
     end
   end
   
   context 'Local' do 
     before(:all) do
-      @local_website = Website.new(:local, url: BASE_URL)
+      @local_website = Website.new(driver: :local_chrome, url: BASE_URL)
     end
 
     after(:all) do
@@ -106,7 +114,7 @@ describe Ferris::Site do
 
   context 'Remote' do 
     before(:all) do
-      @remote_website = Website.new(:remote, browser: :chrome, url: BASE_URL)
+      @remote_website = Website.new(driver: :remote_chrome, url: BASE_URL)
     end
 
     after(:all) do

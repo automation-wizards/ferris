@@ -2,8 +2,8 @@ require 'coveralls'
 Coveralls.wear!
 
 require 'ferris'
-require 'watir_model'
 require 'pry'
+
 require_relative 'support/site'
 
 BASE_URL = 'https://automation-wizards.github.io/ferris'

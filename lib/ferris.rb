@@ -14,4 +14,30 @@ require_relative 'ferris/objects/page'
 require_relative 'ferris/objects/region'
 
 module Ferris
+  class << self
+    REQUIRED_KEYWORDS  = %i[name type].freeze
+    ##
+    # Returns a has of all user defined drivers.
+    #
+    def drivers
+      @drivers ||= Hash.new
+    end
+
+    ##
+    # Define a custom driver.
+    #
+    # Example:
+    # Ferris.define_driver(name: :local_chrome, type: local, browser: :chrome, headless: true, geolocation: 2)
+    #
+    # You can configure the driver any way you wish, but the block
+    # must return a new Watir::Browser instance.
+    #
+    def define(**args)
+      raise 'missing args' unless args.include? REQUIRED_KEYWORDS  
+      name = args.delete(:name) { raise 'You must provide a name for your driver'}
+      drivers[name] = args
+    end
+  end
 end
+
+
