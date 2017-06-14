@@ -26,12 +26,6 @@ module Ferris
         @drivers ||= Hash.new
       end
 
-      ##
-      # Define a custom driver.
-      #
-      # Example:
-      # Ferris::Browser.define_local(name: :chrome, headless: true, geolocation: 2)
-      #
       def define(name, type, **args)
         raise 'unsupported type' unless ALLOWED_TYPES.include? type
         args[:type] = type.to_sym
@@ -47,6 +41,8 @@ module Ferris
         end
       end
 
+      private
+
       def determine_driver(requested)
         drivers.fetch(requested.nil? ? default : requested)
       end
@@ -58,8 +54,6 @@ module Ferris
       def remote(**args)
         Watir::Browser.new(:remote, url: args.fetch(:hub, 'http://localhost:4444/wd/hub'), desired_capabilities: map_caps(args))
       end
-
-      private
 
       def map_caps(args)
         caps = Selenium::WebDriver::Remote::Capabilities.new

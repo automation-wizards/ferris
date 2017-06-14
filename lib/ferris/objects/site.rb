@@ -8,10 +8,9 @@ module Ferris
 
     def initialize(**args)
       @browser = Ferris::Browser.start(args)
-      raise 'Driver was not a Watir Browser' if browser.class != Watir::Browser
-      @url = args[:url]
+      @url = args.fetch(:url)
       @args = args
-      initializer if respond_to?(:initializer)
+      initializer
       visit
     end
 
@@ -31,6 +30,7 @@ module Ferris
       self
     end
 
+    def initializer; end
     def after_visit; end
     
     def close
