@@ -4,7 +4,7 @@ require 'benchmark'
 shared_examples 'Form Filling' do |inputs, retrieval_method|
 
   before(:all) do
-    @website = Website.new(:local, url: BASE_URL)
+    @website = Website.new(url: BASE_URL)
     @page = @website.elements_pg
   end
 

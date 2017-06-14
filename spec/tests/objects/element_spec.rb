@@ -3,7 +3,7 @@ require 'benchmark'
 
 describe 'Ferris Element' do
   before(:all) do
-    @website = Website.new(:local, url: BASE_URL)
+    @website = Website.new(url: BASE_URL)
   end
 
   after(:all) do

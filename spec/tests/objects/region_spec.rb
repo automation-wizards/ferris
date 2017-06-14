@@ -4,7 +4,7 @@ require 'benchmark'
 describe 'Ferris' do
 
   before(:all) do
-    @website = Website.new(:local, url: BASE_URL)
+    @website = Website.new(url: BASE_URL)
     @region = @website.header
   end
 

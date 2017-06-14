@@ -1,58 +1,44 @@
 require_relative '../../spec_helper'
 
 describe Ferris::Site do
-
-  before(:all) do
-    unless ENV['TRAVIS']
-      system('docker run -d -p 4444:4444 --name selenium-hub selenium/hub:3.4.0-chromium')
-      system('docker run --name chrome -d --link selenium-hub:hub selenium/node-chrome:3.4.0-chromium')
-      sleep(5)
-    end
-  end
-
-  after(:all) do
-    unless ENV['TRAVIS']      
-      system('docker stop selenium-hub chrome')
-      system('docker rm selenium-hub chrome')
-    end
-  end
-
   context 'Browser Mutation' do 
 
-    before(:all) do 
-      Ferris::Browser.define(:local_chrome,  :local)
-      Ferris::Browser.define(:has_switches,  :local,  ignore_ssl_errors: true)
-      Ferris::Browser.define(:has_prefs,     :local,  geolocation: 2)
-      Ferris::Browser.define(:headless,      :local,  headless: true)
-      Ferris::Browser.define(:remote_chrome, :remote, browser: 'Chrome')
-    end
-    
     after(:each) do
       @website.close
     end
 
+    it 'supports the default driver' do
+      @website = Website.new(url: BASE_URL)
+      expect(@website).to be_a Ferris::Site
+    end
+
+    it 'supports a custom driver' do
+      @website = Website.new(driver: :my_custom, url: BASE_URL)
+      expect(@website).to be_a Ferris::Site
+    end
+
     it 'supports switches' do
-      @website = Website.new(driver: :has_switches, url: BASE_URL)
+      @website = Website.new(ignore_ssl_errors: true, url: BASE_URL)
       expect(@website).to be_a Ferris::Site
     end
 
     it 'supports headless' do
-      @website = Website.new(driver: :headless, url: BASE_URL)
+      @website = Website.new(headless: true, url: BASE_URL)
       expect(@website).to be_a Ferris::Site
     end
 
     it 'supports maximizing a headless window' do
-      @website = Website.new(driver: :headless, url: BASE_URL)
+      @website = Website.new(headless: true, url: BASE_URL)
       expect(@website.browser.window.maximize).to be_truthy
     end
 
     it 'supports re-sizing a headless window' do
-      @website = Website.new(driver: :headless, url: BASE_URL)
+      @website = Website.new(headless: true, url: BASE_URL)
       expect(@website.browser.window.resize_to 100, 100).to be_truthy
     end
 
    it 'supports prefs' do
-     @website = Website.new(driver: :has_prefs, url: BASE_URL)
+     @website = Website.new(geolocation:2, url: BASE_URL)
      expect(@website).to be_a Ferris::Site
     end
 
@@ -64,7 +50,7 @@ describe Ferris::Site do
   
   context 'Local' do 
     before(:all) do
-      @local_website = Website.new(driver: :local_chrome, url: BASE_URL)
+      @local_website = Website.new(url: BASE_URL)
     end
 
     after(:all) do

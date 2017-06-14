@@ -1,6 +1,9 @@
 module Ferris
   module Browser
     class << self
+
+      attr_accessor :default
+
       SWITCH_MAP = { headless:          '--headless',
                      cpu_only:          '--disable-gpu',
                      profile:           'user-data-dir=****',
@@ -36,16 +39,18 @@ module Ferris
       end
 
       def start(args)
-        driver = args.fetch(:driver)
-        requested = drivers.fetch(args.fetch(:driver)).merge(args)
+        requested = determine_driver(args[:driver]).merge(args)
         case requested[:type]
         when :local  then local(requested)
-        when :remote then remote(requested) 
+        when :remote then remote(requested)
         else raise 'not a valid driver type'
-        end          
+        end
       end
-      
-                        
+
+      def determine_driver(requested)
+        drivers.fetch(requested.nil? ? default : requested)
+      end
+
       def local(**args)
         Watir::Browser.new(:chrome, options: Selenium::WebDriver::Chrome::Options.new(args: map_switches(args), prefs: map_prefs(args)))
       end
