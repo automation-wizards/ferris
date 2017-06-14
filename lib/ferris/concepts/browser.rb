@@ -20,16 +20,15 @@ module Ferris
       BROWSER_MAP = { chrome:    { local: :chrome,    remote: 'Chrome',    options: 'Chrome' },
                       firefox:   { local: :firefox,   remote: 'Firefox',   options: 'Firefox' },
                       safari:    { local: :safari,    remote: 'Safari',    options: 'Safari' },
-                      ie:        { local: :ie,        remote: 'IE',        options: 'IE'} },
+                      ie:        { local: :ie,        remote: 'IE',        options: 'IE' },
                       phantomjs: { local: :phantomjs, remote: 'PhantomJS', options: 'PhantomJS' } }.freeze
 
       def local(**args)
-        vendor = args.fetch(:browser, :chrome)
-        binding.pry
-        options = Kernel.const_get("Selenium::WebDriver::#{vendor.capitalize}::Options").new
+        browser = verify_vendor(args)
+        options = Kernel.const_get("Selenium::WebDriver::#{browser[:options]}::Options").new
         map_switches(args, options)
         map_prefs(args, options)
-        Watir::Browser.new(vendor, options: options)
+        Watir::Browser.new(browser[:local], options: options)
       end
 
       def remote(**args)
@@ -39,7 +38,10 @@ module Ferris
 
       private
 
-      def 
+      def verify_vendor(args)
+        BROWSER_MAP[args.fetch(:browser, :chrome)]
+      end
+      
 
       def map_caps(args)
         caps = Selenium::WebDriver::Remote::Capabilities.new
