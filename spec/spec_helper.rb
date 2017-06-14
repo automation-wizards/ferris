@@ -1,16 +1,16 @@
 require 'coveralls'
 Coveralls.wear!
 
-require './spec/support/site'
+require 'ferris'
+require 'watir_model'
+require 'pry'
+require_relative 'support/site'
+
+BASE_URL = 'https://automation-wizards.github.io/ferris'
+
+Watir.default_timeout = 1
 
 RSpec.configure do |config|
-  config.include Ferris::SiteObject
+  config.alias_it_should_behave_like_to :it_supports, ''
 
-  config.before(:each) do
-    Ferris::Config.browser = Watir::Browser.new :chrome
-  end
-
-  config.after(:each) do |_scenario|
-    Ferris::Config.browser.close
-  end
 end

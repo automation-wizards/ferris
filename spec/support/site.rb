@@ -1,26 +1,15 @@
-require './lib/ferris'
+require_relative 'data/element_data'
+require_relative 'regions/header'
+require_relative 'regions/article'
+require_relative 'pages/elements'
 
-require './spec/support/regions/header'
+class Website < Ferris::Site
+  
+  pg(:elements_pg, Pg::El)
 
-require './spec/support/pages/home'
-require './spec/support/pages/apple'
-require './spec/support/pages/grandparent'
-require './spec/support/pages/parent'
-require './spec/support/pages/child'
+  rgn(:header,    Rgn::Header)  { b.header }
+  rgn(:articles,  Rgn::Article) { b.articles }
 
-module Ferris
-  module SiteObject
-    class Wikipedia
-      SiteObject.configure do
-        base_url('https://en.wikipedia.org')
-        page(:home_page, TestSite::Home)
-        page(:apple_page, TestSite::Apple)
-        page(:child_page, TestSite::Child)
-        page(:parent_page, TestSite::Parent)
-        page(:grandparent_page, TestSite::Grandparent)
-
-        region(:header, TestSite::Header) { browser.div(id: 'mw-head') }
-      end
-    end
-  end
 end
+
+
