@@ -1,8 +1,17 @@
 dist: trusty
 sudo: require
 language: ruby
+cache: bundler
 rvm:
-  - 2.2.0
+  - 2.4.1
+
+services:
+  - docker
+
+before_install:
+- docker run -d -p 4444:4444 --name selenium-hub selenium/hub:3.4.0-chromium
+- docker run --name chrome -d --link selenium-hub:hub selenium/node-chrome:3.4.0-chromium
+
 addons:
   apt:
     packages:
