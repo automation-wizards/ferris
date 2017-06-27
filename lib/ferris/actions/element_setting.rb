@@ -1,6 +1,6 @@
 module Watir
   class Element
-    
+
     def do(v = nil)
       case self
       when Watir::Radio
@@ -25,17 +25,19 @@ module Watir
       case self
       when Watir::CheckBox, Watir::Radio
         browser.execute_script(js_check(v), self)
+        fire_event :change
       when Watir::Select
-        browser.execute_script(js_select(v), self)  
+        browser.execute_script(js_select(v), self)
+        fire_event :change
       when Watir::TextField, Watir::TextArea, Watir::Input
         browser.execute_script(js_set(v), self)
+        fire_event :change
       else
         browser.execute_script(js_click, self)
       end
-      fire_event :change
     end
 
-    private 
+    private
 
     def js_select(v)
       <<-SCRIPT
@@ -63,11 +65,11 @@ module Watir
         } else if(action == false && e.checked == false) {
             return true;
         } else {
-            return false;   
-        }          
+            return false;
+        }
       }
       SCRIPT
-    end 
+    end
 
     def js_set(v)
       <<-SCRIPT
@@ -81,7 +83,7 @@ module Watir
         return false;
       }
       SCRIPT
-    end   
+    end
 
     def js_click
       <<-SCRIPT
@@ -91,7 +93,7 @@ module Watir
         return true;
       }
       SCRIPT
-    end 
+    end
 
   end
 end
