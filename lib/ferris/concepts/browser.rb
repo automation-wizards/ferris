@@ -4,6 +4,7 @@ module Ferris
     class << self
       SWITCH_MAP = { headless:          '--headless',
                      cpu_only:          '--disable-gpu',
+                     no_sandbox:        '--no-sandbox',
                      profile:           'user-data-dir=****',
                      size:              '--window-size=****',
                      user_agent:        '--user-agent=****',
