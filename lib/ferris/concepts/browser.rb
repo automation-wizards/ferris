@@ -5,6 +5,8 @@ module Ferris
       attr_accessor :default
 
       SWITCH_MAP = { headless:          '--headless',
+                     screenshot:        '--screenshot',
+                     debug:             '--remote-debugging-port=9222',
                      no_sandbox:        '--no-sandbox',
                      cpu_only:          '--disable-gpu',
                      profile:           'user-data-dir=****',
