@@ -8,7 +8,8 @@ module Ferris
                      profile:           'user-data-dir=****',
                      size:              '--window-size=****',
                      user_agent:        '--user-agent=****',
-                     ignore_ssl_errors: '--ignore-certificate-errors' }.freeze
+                     ignore_ssl_errors: '--ignore-certificate-errors',
+                     allow_insecure:    '--allow-running-insecure-content' }.freeze
 
       PREF_MAP   = { geolocation: :managed_default_content_settings,
                      password_manager: :password_manager_enabled }.freeze
