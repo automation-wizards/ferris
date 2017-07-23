@@ -4,7 +4,8 @@ module Ferris
 
       attr_accessor :default
 
-      SWITCH_MAP = { headless:          '--headless',
+      SWITCH_MAP = { remote_port:       '--remote-debugging-port=****',
+                     headless:          '--headless',
                      logs:              '--log-path=****',
                      screenshot:        '--screenshot',
                      debug:             '--remote-debugging-port=****',
