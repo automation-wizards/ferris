@@ -1,7 +1,7 @@
 module Ferris
   module Browser
     class << self
-
+      
       attr_accessor :default
 
       SWITCH_MAP = { remote_ip:         '--remote-debugging-address=****',
@@ -11,10 +11,12 @@ module Ferris
                      screenshot:        '--screenshot',
                      no_sandbox:        '--no-sandbox',
                      cpu_only:          '--disable-gpu',
+                     no_sandbox:        '--no-sandbox',
                      profile:           'user-data-dir=****',
                      size:              '--window-size=****',
                      user_agent:        '--user-agent=****',
-                     ignore_ssl_errors: '--ignore-certificate-errors' }.freeze
+                     ignore_ssl_errors: '--ignore-certificate-errors',
+                     allow_insecure:    '--allow-running-insecure-content' }.freeze
 
       PREF_MAP   = { geolocation: :managed_default_content_settings,
                      password_manager: :password_manager_enabled }.freeze
