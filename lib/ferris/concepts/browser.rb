@@ -2,7 +2,8 @@ require 'watir'
 module Ferris
   module Browser
     class << self
-      SWITCH_MAP = { headless:          '--headless',
+      SWITCH_MAP = { remote_port:       '--remote-debugging-port=****',
+                     headless:          '--headless',
                      cpu_only:          '--disable-gpu',
                      no_sandbox:        '--no-sandbox',
                      profile:           'user-data-dir=****',
