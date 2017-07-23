@@ -4,7 +4,8 @@ module Ferris
 
       attr_accessor :default
 
-      SWITCH_MAP = { remote_port:       '--remote-debugging-port=****',
+      SWITCH_MAP = { remote_ip:         '--remote-debugging-address=****',
+                     remote_port:       '--remote-debugging-port=****',
                      headless:          '--headless',
                      logs:              '--log-path=****',
                      screenshot:        '--screenshot',
