@@ -10,15 +10,29 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Functionally minded Site, Page, and Region objects'
   spec.description   = 'An opinionated test framework built on top of Watir'
   spec.license       = 'MIT'
-  spec.files         = `git ls-files`.split("\n")
-  spec.test_files    = `git ls-files -- {spec}/*`.split("\n")
+
+  root_path      = File.dirname(__FILE__)
+  all_files      = Dir.chdir(root_path) { Dir.glob("**/{*,.*}") }
+  all_files.reject! { |file| [".", ".."].include?(File.basename(file)) }
+  all_files.reject! { |file| file.start_with?("website/") }
+  gitignore_path = File.join(root_path, ".gitignore")
+  gitignore      = File.readlines(gitignore_path)
+  gitignore.map!    { |line| line.chomp.strip }
+  gitignore.reject! { |line| line.empty? || line =~ /^(#|!)/ }
+  unignored_files = all_files.reject do |file|
+    next true if File.directory?(file)
+    gitignore.any? do |ignore|
+      File.fnmatch(ignore, file, File::FNM_PATHNAME) ||
+        File.fnmatch(ignore, File.basename(file), File::FNM_PATHNAME)
+    end
+  end
+ 
+  spec.files         = unignored_files
+  spec.executables   = unignored_files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = unignored_files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
   spec.add_dependency             'watir', '~> 6.1'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'parallel_tests'
   spec.add_development_dependency 'coveralls'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'watir_model'
-  spec.add_development_dependency 'pry'
 end

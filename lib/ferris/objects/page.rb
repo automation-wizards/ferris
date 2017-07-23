@@ -11,7 +11,7 @@ module Ferris
     def initialize(site:)
       @site = site
       @url = site.url + partial_url
-      initializer if respond_to?(:initializer)
+      initializer
     end
 
     def site
@@ -31,6 +31,7 @@ module Ferris
       self
     end
 
+    def initializer; end
     def after_visit; end  
   end
 end

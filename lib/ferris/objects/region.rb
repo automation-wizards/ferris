@@ -12,7 +12,7 @@ module Ferris
     def initialize(root:, site:)
       @root = root
       @site = site
-      initializer if respond_to?(:initializer)
+      initializer
     end
 
     def site
@@ -30,5 +30,7 @@ module Ferris
     end
     alias r root
     
+    def initializer; end
+
   end
 end

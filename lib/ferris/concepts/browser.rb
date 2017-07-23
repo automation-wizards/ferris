@@ -1,9 +1,15 @@
-require 'watir'
 module Ferris
   module Browser
     class << self
-      SWITCH_MAP = { remote_port:       '--remote-debugging-port=****',
+      
+      attr_accessor :default
+
+      SWITCH_MAP = { remote_ip:         '--remote-debugging-address=****',
+                     remote_port:       '--remote-debugging-port=****',
                      headless:          '--headless',
+                     logs:              '--log-path=****',
+                     screenshot:        '--screenshot',
+                     no_sandbox:        '--no-sandbox',
                      cpu_only:          '--disable-gpu',
                      no_sandbox:        '--no-sandbox',
                      profile:           'user-data-dir=****',
@@ -20,31 +26,41 @@ module Ferris
                    os:      :platform,
                    name:    :name }.freeze
 
-      BROWSER_MAP = { chrome:    { local: :chrome,    remote: 'Chrome',    options: 'Chrome' },
-                      firefox:   { local: :firefox,   remote: 'Firefox',   options: 'Firefox' },
-                      safari:    { local: :safari,    remote: 'Safari',    options: 'Safari' },
-                      ie:        { local: :ie,        remote: 'IE',        options: 'IE' },
-                      phantomjs: { local: :phantomjs, remote: 'PhantomJS', options: 'PhantomJS' } }.freeze
+      ALLOWED_TYPES = %i[local remote]
 
-      def local(**args)
-        browser = verify_vendor(args)
-        options = Kernel.const_get("Selenium::WebDriver::#{browser[:options]}::Options").new
-        map_switches(args, options)
-        map_prefs(args, options)
-        Watir::Browser.new(browser[:local], options: options)
+
+      def drivers
+        @drivers ||= Hash.new
       end
 
-      def remote(**args)
-        hub = args.fetch(:hub, 'http://localhost:4444/wd/hub')
-        Watir::Browser.new(:remote, url: hub, desired_capabilities: map_caps(args))
+      def define(name, type, **args)
+        raise 'unsupported type' unless ALLOWED_TYPES.include? type
+        args[:type] = type.to_sym
+        drivers[name.to_sym] = args
+      end
+
+      def start(args)
+        requested = determine_driver(args[:driver]).merge(args)
+        case requested[:type]
+        when :local  then local(requested)
+        when :remote then remote(requested)
+        else raise 'not a valid driver type'
+        end
       end
 
       private
 
-      def verify_vendor(args)
-        BROWSER_MAP[args.fetch(:browser, :chrome)]
+      def determine_driver(requested)
+        drivers.fetch(requested.nil? ? default : requested)
       end
-      
+
+      def local(**args)
+        Watir::Browser.new(:chrome, options: Selenium::WebDriver::Chrome::Options.new(args: map_switches(args), prefs: map_prefs(args)))
+      end
+
+      def remote(**args)
+        Watir::Browser.new(:remote, url: args.fetch(:hub, 'http://localhost:4444/wd/hub'), desired_capabilities: map_caps(args))
+      end
 
       def map_caps(args)
         caps = Selenium::WebDriver::Remote::Capabilities.new
@@ -52,24 +68,26 @@ module Ferris
         caps
       end
 
-      def map_switches(args, options)
+      def map_switches(args)
+        switch_arr = []
         args.each do |k, v|
-          options.add_argument(SWITCH_MAP[k].gsub('****', v.to_s)) if SWITCH_MAP.include?(k) && v
+          switch_arr.push(SWITCH_MAP[k].gsub('****', v.to_s)) if SWITCH_MAP.include?(k) && v
         end
+        switch_arr
       end
 
-      def map_prefs(args, options)
-        p = { managed_default_content_settings: {} }
+      def map_prefs(args)
+        pref_hash = { profile: { managed_default_content_settings: {} } }
         args.each do |k, v|
           next unless PREF_MAP.include?(k)
           case k
           when :geolocation
-            p[:managed_default_content_settings][:geolocation] = v.to_i
+            pref_hash[:profile][:managed_default_content_settings][:geolocation] = v.to_i
           else
-            p[PREF_MAP[k]] = v
+            pref_hash[:profile][PREF_MAP[k]] = v
           end
         end
-        options.add_preference(:profile, p)
+        pref_hash
       end
     end
   end

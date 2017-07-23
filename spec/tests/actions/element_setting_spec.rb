@@ -3,7 +3,7 @@ require_relative '../../spec_helper'
 describe 'Monkey Patches' do
 
   before(:all) do
-    @website = Website.new(:local, url: BASE_URL)
+    @website = Website.new(url: BASE_URL)
     @element = @website.elements_pg.text_field
   end
 

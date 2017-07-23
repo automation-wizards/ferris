@@ -6,11 +6,11 @@ module Ferris
     extend Ferris::Concepts::Pages
     extend Ferris::Concepts::Regions
 
-    def initialize(type, **args)
-      @browser = Ferris::Browser.send(type, args)
-      @url = args[:url]
+    def initialize(**args)
+      @browser = Ferris::Browser.start(args)
+      @url = args.fetch(:url)
       @args = args
-      initializer if respond_to?(:initializer)
+      initializer
       visit
     end
 
@@ -30,6 +30,7 @@ module Ferris
       self
     end
 
+    def initializer; end
     def after_visit; end
     
     def close
